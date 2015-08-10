@@ -6,23 +6,24 @@ import re
 
 template = Template(open('bootstrap.html').read())
 scrape = [
-    'http://www.sdcwa.org/find-your-water-district',
-    'http://www.sdcwa.org/protecting-regional-water-supply-reliability',
-    'http://www.sdcwa.org/conservation-programs-rebates',
-    'http://www.sdcwa.org/drought-resources',
-    'http://www.sdcwa.org/drought-contact',
-    'http://www.sdcwa.org/drought-freebies',
-    'http://www.sdcwa.org/water-saving-superstars-partners',
-    'http://www.sdcwa.org/drought-state-restrictions',
-    'http://www.sdcwa.org/drought-campaign-ads-messages',
-    'http://www.sdcwa.org/drought-information',
+    ('http://www.sdcwa.org/find-your-water-district', 'find-your-water-district'),
+    ('http://www.sdcwa.org/protecting-regional-water-supply-reliability','protecting-regional-water-supply-reliability'),
+    ('http://www.sdcwa.org/conservation-programs-rebates','conservation-programs-rebates'),
+    ('http://www.sdcwa.org/drought-resources','drought-resources'),
+    ('http://www.sdcwa.org/drought-contact','drought-contact'),
+    ('http://www.sdcwa.org/drought-freebies','drought-freebies'),
+    ('http://www.sdcwa.org/water-saving-superstars-partners','water-saving-superstars-partners'),
+    ('http://www.sdcwa.org/drought-state-restrictions','drought-state-restrictions'),
+    ('http://www.sdcwa.org/drought-campaign-ads-messages','drought-campaign-ads-messages'),
+    ('http://www.sdcwa.org/drought-information','drought-information'),
+    ('http://www.sdcwa.org/drought-10-watersmart-tips','drought-10-watersmart-tips'),
       ]
 links = []
 
 img_re = re.compile(r"image-")
 
 i = 1
-for link in scrape:
+for link,slug in scrape:
     print link
     r = requests.get(link)
     t = r.text.encode('utf-8', 'ignore')
@@ -69,7 +70,7 @@ for link in scrape:
             break
     content = template.render(title=title, body=body_content.decode('utf-8', 'ignore'))
 
-    link = '{0}.html'.format(i)
+    link = '{0}.html'.format(slug)
     links.append({"href":link, "title": title})
     f = open('pages/{0}'.format(link), 'w')
     f.write(content.encode('utf-8'))
