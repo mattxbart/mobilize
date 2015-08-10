@@ -36,14 +36,18 @@ for link in scrape:
     body_content = ''
     for thing in stuff:
         for content in thing.findAll('div'):
+
             if content.h1:
                 content.h1.replace_with('')
 
             for img in content.findAll('img'):
                 del img['style']
                 img['class'] = 'img-responsive'
+            for div in content.findAll('div', {"class": "links"}):
+                div.replace_with("")
             for div in content.findAll('div'):
                 pass
+
             for span in content.findAll('span', {"class": "photo-title"}):
                 span['class'] = 'caption'
 

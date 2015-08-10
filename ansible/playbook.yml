@@ -1,0 +1,15 @@
+---
+- hosts: webservers
+  vars:
+    domain: wahoo.sdcwa.org
+  remote_user: mbartolome
+
+  tasks:
+
+    - name: Copy over mobile pages
+      copy: src={{ item }} dest=/home/www/sdcwa/public_html/mobile/
+      with_fileglob:
+        - /home/mbartolome/mobiletest/mobilize/pages/*.html
+
+
+
