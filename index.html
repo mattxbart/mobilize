@@ -10,9 +10,11 @@
   
   <body>
     <div class="container">
+      <ol>
       {% for link in links %}
-      <a href="{{ link.href }}">{{ link.title }}</a><p>
+      <li><a href="{{ link.href }}">{{ link.title }}</a></li>
 	{% endfor %}
+      </ol>
     </div>
   </body>
 </html>

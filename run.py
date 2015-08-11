@@ -26,8 +26,9 @@ i = 1
 for link,slug in scrape:
     print link
     r = requests.get(link)
-    t = r.text.encode('utf-8', 'ignore')
+    t = r.text
     soup = BeautifulSoup(t, 'html.parser')
+    soup.prettify(formatter='html')
     title = soup.h1.contents[0]
 
     stuff = soup.body.findAll('div', {"class": "node odd full-node node-type-page"})
@@ -36,6 +37,10 @@ for link,slug in scrape:
 
     body_content = ''
     for thing in stuff:
+
+        for style in thing.findAll('style'):
+            style.replace_with('')
+
         for content in thing.findAll('div'):
 
             if content.h1:
@@ -46,6 +51,10 @@ for link,slug in scrape:
                 img['class'] = 'img-responsive'
             for div in content.findAll('div', {"class": "links"}):
                 div.replace_with("")
+
+            for div in content.findAll('div', {"class": "dashed-line"}):
+                div.replace_with("")
+
             for div in content.findAll('div'):
                 pass
 
