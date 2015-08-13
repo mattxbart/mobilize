@@ -3,8 +3,11 @@ from bs4 import BeautifulSoup
 from bs4 import NavigableString, Tag
 from jinja2 import Template
 import re
+import os
 
-template = Template(open('bootstrap.html').read())
+base_dir = '/home/mbartolome/mobiletest/mobilize'
+
+template = Template(open(os.path.join(base_dir, 'bootstrap.html')).read())
 scrape = [
     ('http://www.sdcwa.org/find-your-water-district', 'find-your-water-district'),
     ('http://www.sdcwa.org/protecting-regional-water-supply-reliability','protecting-regional-water-supply-reliability'),
@@ -17,6 +20,9 @@ scrape = [
     ('http://www.sdcwa.org/drought-campaign-ads-messages','drought-campaign-ads-messages'),
     ('http://www.sdcwa.org/drought-information','drought-information'),
     ('http://www.sdcwa.org/drought-10-watersmart-tips','drought-10-watersmart-tips'),
+    ('http://www.sdcwa.org/drought-conditions', 'drought-conditions'),
+    ('http://www.sdcwa.org/drought-faq', 'drought-faq'),
+    ('http://www.sdcwa.org/water-use', 'water-use'),
       ]
 links = []
 
@@ -45,6 +51,15 @@ for link,slug in scrape:
 
             if content.h1:
                 content.h1.replace_with('')
+                
+            for div in content.findAll('div', {"class": "breadcrumb"}):
+                div.replace_with("")
+
+            for div in content.findAll('div', {"id": "faq-expand-all"}):
+                div.replace_with("")
+
+            for div in content.findAll('div', {"class": "share-wrapper"}):
+                div.replace_with("")
 
             for img in content.findAll('img'):
                 del img['style']
@@ -81,13 +96,13 @@ for link,slug in scrape:
 
     link = '{0}.html'.format(slug)
     links.append({"href":link, "title": title})
-    f = open('pages/{0}'.format(link), 'w')
+    f = open(os.path.join(base_dir, 'pages/{0}'.format(link)), 'w')
     f.write(content.encode('utf-8'))
     i += 1
 
 
-index_template = Template(open('index.html').read())
+index_template = Template(open(os.path.join(base_dir, 'index.html')).read())
 c = index_template.render(links=links)
-f = open('pages/index.html', 'w')
+f = open(os.path.join(base_dir, 'pages/index.html'), 'w')
 f.write(c)
 

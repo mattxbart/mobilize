@@ -1,15 +1,16 @@
 ---
 - hosts: webservers
-  vars:
-    domain: wahoo.sdcwa.org
-  remote_user: mbartolome
 
+  vars:
+    remote_user: "{{ lookup('env','USER') }}"
   tasks:
+    - name: debug info
+      debug: msg="remote user {{ remote_user }}"
 
     - name: Copy over mobile pages
       copy: src={{ item }} dest=/home/www/sdcwa/public_html/mobile/
       with_fileglob:
-        - /home/mbartolome/mobiletest/mobilize/pages/*.html
+        - /home/{{ remote_user }}/mobiletest/mobilize/pages/*.html
 
 
 
